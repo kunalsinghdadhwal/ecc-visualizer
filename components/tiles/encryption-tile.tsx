@@ -77,7 +77,7 @@ export function EncryptionTile() {
   const isDone = cipherText && !isPlaying && currentStep >= encryptSteps.length - 1;
 
   return (
-    <BentoTile title="Encryption" subtitle="ElGamal" className="self-start">
+    <BentoTile title="Encryption" subtitle="ElGamal">
       <div className="flex flex-col gap-3">
         <div className="space-y-2">
           <Label className="text-sm">Random k = {randomK}</Label>

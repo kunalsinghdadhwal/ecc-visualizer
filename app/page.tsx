@@ -44,11 +44,13 @@ export default function Page() {
         <PointAdditionTile />
         <ScalarMultTile />
 
-        {/* Row 3-4: Key Gen 2x2, Generator + Encryption on right, Decryption below */}
+        {/* Bottom: Key Gen 2 cols + stacked right column */}
         <KeyGenerationTile />
-        <GeneratorTile />
-        <EncryptionTile />
-        <DecryptionTile />
+        <div className="md:col-span-2 flex flex-col gap-3">
+          <GeneratorTile />
+          <EncryptionTile />
+          <DecryptionTile />
+        </div>
       </BentoGrid>
     </main>
   );

@@ -71,7 +71,7 @@ export function DecryptionTile() {
   const isDone = decryptedPoint && !isPlaying && currentStep >= decryptSteps.length - 1;
 
   return (
-    <BentoTile title="Decryption" subtitle="ElGamal" className="self-start">
+    <BentoTile title="Decryption" subtitle="ElGamal">
       <div className="flex flex-col gap-3">
         <div className="flex gap-2">
           <Button size="sm" onClick={runDecrypt} disabled={!canDecrypt} className="text-xs">

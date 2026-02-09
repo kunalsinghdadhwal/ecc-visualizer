@@ -10,17 +10,16 @@ export function GeneratorTile() {
 
   const onCurve = generator ? isOnCurve(generator, curveParams) : false;
   const disc = discriminant(curveParams);
+  const binary = privateKey.toString(2);
+  const addCount = binary.slice(1).split("").filter((b) => b === "1").length;
 
   return (
-    <BentoTile title="Generator" subtitle="Base point" className="self-start">
-      <div className="flex flex-col gap-3">
+    <BentoTile title="Generator" subtitle="Base point">
+      <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <div className="text-xs text-muted-foreground">
-            <p className="font-mono text-foreground text-sm">
-              G = {generator ? formatPoint(generator) : "none"}
-            </p>
-          </div>
-
+          <p className="font-mono text-foreground text-sm">
+            G = {generator ? formatPoint(generator) : "none"}
+          </p>
           <div className="space-y-1 text-xs text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <span
@@ -41,42 +40,34 @@ export function GeneratorTile() {
           </div>
         </div>
 
-        <div className="border-t border-border/40 pt-2 space-y-1.5 text-xs text-muted-foreground">
+        <div className="space-y-1.5 text-xs text-muted-foreground">
           <p>
             Private key d ={" "}
             <span className="font-mono text-foreground">{privateKey}</span>
           </p>
           <p>
             Binary:{" "}
-            <span className="font-mono text-foreground">
-              {privateKey.toString(2)}
-            </span>
+            <span className="font-mono text-foreground">{binary}</span>
           </p>
           <p>
             Operations:{" "}
             <span className="font-mono text-foreground">
-              {privateKey.toString(2).length - 1} double
-              {privateKey.toString(2).slice(1).split("").filter((b) => b === "1").length > 0
-                ? `, ${privateKey.toString(2).slice(1).split("").filter((b) => b === "1").length} add`
-                : ""}
+              {binary.length - 1} double{addCount > 0 ? `, ${addCount} add` : ""}
             </span>
           </p>
-        </div>
-
-        {keyPair ? (
-          <div className="border-t border-border/40 pt-2 text-xs text-muted-foreground">
+          {keyPair ? (
             <p>
               Public key Q ={" "}
               <span className="font-mono text-foreground">
                 {formatPoint(keyPair.publicKey)}
               </span>
             </p>
-          </div>
-        ) : (
-          <p className="text-xs text-muted-foreground/60 italic">
-            Generate keys to see Q
-          </p>
-        )}
+          ) : (
+            <p className="text-muted-foreground/60 italic">
+              Generate keys to see Q
+            </p>
+          )}
+        </div>
       </div>
     </BentoTile>
   );

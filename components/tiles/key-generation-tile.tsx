@@ -104,8 +104,7 @@ export function KeyGenerationTile() {
       title="Key Generation"
       subtitle={`Q = ${privateKey}G`}
       colSpan={2}
-      rowSpan={2}
-      className="md:col-span-2 lg:row-span-2"
+      className="md:col-span-2"
     >
       <div className="flex flex-col gap-3 h-full">
         <div className="flex-1 min-h-[220px]">
