@@ -56,6 +56,8 @@ export function generateCurvePaths(
     regions.push(current);
   }
 
+  const r3 = (n: number) => +n.toFixed(3);
+
   // For each region, build a single closed SVG path:
   // upper left-to-right, then lower right-to-left
   return regions
@@ -65,16 +67,16 @@ export function generateCurvePaths(
       const lower = [...r.lower].reverse();
 
       // Start at the first upper point
-      let d = `M ${upper[0].x} ${-upper[0].y}`;
+      let d = `M ${r3(upper[0].x)} ${r3(-upper[0].y)}`;
 
       // Trace upper branch left to right
       for (let i = 1; i < upper.length; i++) {
-        d += ` L ${upper[i].x} ${-upper[i].y}`;
+        d += ` L ${r3(upper[i].x)} ${r3(-upper[i].y)}`;
       }
 
       // Trace lower branch right to left (connects seamlessly at the rightmost x)
       for (let i = 0; i < lower.length; i++) {
-        d += ` L ${lower[i].x} ${-lower[i].y}`;
+        d += ` L ${r3(lower[i].x)} ${r3(-lower[i].y)}`;
       }
 
       d += " Z";

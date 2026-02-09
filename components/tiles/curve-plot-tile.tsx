@@ -6,8 +6,7 @@ import { CurveRenderer } from "@/components/svg/curve-renderer";
 import { PointMarker } from "@/components/svg/point-marker";
 import { LineOverlay } from "@/components/svg/line-overlay";
 import { useECCStore } from "@/hooks/use-ecc-store";
-import { DEFAULT_VIEWBOX } from "@/lib/curve-utils";
-import { snapToCurve } from "@/lib/curve-utils";
+import { DEFAULT_VIEWBOX, snapToCurve } from "@/lib/curve-utils";
 
 export function CurvePlotTile() {
   const {

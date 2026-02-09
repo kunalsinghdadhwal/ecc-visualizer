@@ -1,5 +1,3 @@
-"use client";
-
 import { BentoGrid } from "@/components/bento-grid";
 import { CurvePlotTile } from "@/components/tiles/curve-plot-tile";
 import { CurveParamsTile } from "@/components/tiles/curve-params-tile";

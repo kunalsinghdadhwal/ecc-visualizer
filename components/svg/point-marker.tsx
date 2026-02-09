@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { motion } from "framer-motion";
 import type { Point } from "@/types/ecc";
 
@@ -11,7 +12,7 @@ interface PointMarkerProps {
   animate?: boolean;
 }
 
-export function PointMarker({
+export const PointMarker = memo(function PointMarker({
   point,
   color = "oklch(0.73 0.12 290)",
   label,
@@ -54,4 +55,4 @@ export function PointMarker({
       )}
     </g>
   );
-}
+});

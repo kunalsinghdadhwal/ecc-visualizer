@@ -13,7 +13,6 @@ import { useECCStore } from "@/hooks/use-ecc-store";
 import { generateKeys } from "@/lib/ecc-elgamal";
 import { formatPoint, pointToKeyString } from "@/lib/message-mapping";
 import type { ScalarMultStep } from "@/types/ecc";
-import { scalarMultiply } from "@/lib/ecc-math";
 
 interface GeomStep {
   label: string;
@@ -44,11 +43,9 @@ export function KeyGenerationTile() {
   const compute = useCallback(() => {
     if (!generator) return;
     try {
-      const { keyPair: kp, steps: animSteps } = generateKeys(privateKey, generator, curveParams);
+      const { keyPair: kp, steps: animSteps, multSteps } = generateKeys(privateKey, generator, curveParams);
       setKeyPair(kp);
       setKeyGenSteps(animSteps);
-
-      const { steps: multSteps } = scalarMultiply(privateKey, generator, curveParams);
 
       const gSteps: GeomStep[] = multSteps.map((s: ScalarMultStep) => ({
         label: s.label,

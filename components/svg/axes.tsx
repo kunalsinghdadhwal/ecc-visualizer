@@ -1,12 +1,13 @@
 "use client";
 
+import { memo } from "react";
 import type { ViewBox } from "@/lib/curve-utils";
 
 interface AxesProps {
   viewBox: ViewBox;
 }
 
-export function Axes({ viewBox }: AxesProps) {
+export const Axes = memo(function Axes({ viewBox }: AxesProps) {
   const { xMin, xMax, yMin, yMax } = viewBox;
 
   const gridLines: React.ReactNode[] = [];
@@ -75,4 +76,4 @@ export function Axes({ viewBox }: AxesProps) {
   }
 
   return <g className="text-muted-foreground">{gridLines}</g>;
-}
+});

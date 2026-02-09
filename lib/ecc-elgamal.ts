@@ -1,9 +1,10 @@
-import type { Point, CurveParams, KeyPair, CipherText, AnimationStep } from "@/types/ecc";
+import type { Point, CurveParams, KeyPair, CipherText, AnimationStep, ScalarMultStep } from "@/types/ecc";
 import { scalarMultiply, pointAdd, negatePoint, isPointAtInfinity } from "./ecc-math";
 
 export interface KeyGenResult {
   keyPair: KeyPair;
   steps: AnimationStep[];
+  multSteps: ScalarMultStep[];
 }
 
 export function generateKeys(
@@ -38,6 +39,7 @@ export function generateKeys(
   return {
     keyPair: { privateKey, publicKey: result! },
     steps,
+    multSteps,
   };
 }
 

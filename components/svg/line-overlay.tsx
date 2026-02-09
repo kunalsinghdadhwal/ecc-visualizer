@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { motion } from "framer-motion";
 import type { Point } from "@/types/ecc";
 import type { ViewBox } from "@/lib/curve-utils";
@@ -14,7 +15,7 @@ interface LineOverlayProps {
   animate?: boolean;
 }
 
-export function LineOverlay({
+export const LineOverlay = memo(function LineOverlay({
   from,
   to,
   color = "oklch(0.58 0.08 290)",
@@ -64,4 +65,4 @@ export function LineOverlay({
   }
 
   return <line {...lineProps} />;
-}
+});
