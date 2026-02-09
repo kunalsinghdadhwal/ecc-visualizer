@@ -12,9 +12,9 @@ import { DecryptionTile } from "@/components/tiles/decryption-tile";
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-background py-6">
-      <div className="max-w-[1600px] mx-auto px-4 mb-6">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
+    <main className="min-h-screen bg-background py-8">
+      <div className="max-w-[1600px] mx-auto px-4 mb-8">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
           ECC Visualizer
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
@@ -22,17 +22,17 @@ export default function Page() {
         </p>
       </div>
       <BentoGrid>
-        {/* Row 1-2 */}
+        {/* Row 1-2: Curve 2x2, Params 1x1, Message 1x1, Point Addition 2x1 */}
         <CurvePlotTile />
         <CurveParamsTile />
         <MessageInputTile />
         <PointAdditionTile />
 
-        {/* Row 3 */}
+        {/* Row 3-4: Scalar Mult 2x1, Key Gen 2x2 */}
         <ScalarMultTile />
         <KeyGenerationTile />
 
-        {/* Row 4-5 */}
+        {/* Row 5-6: Encryption 2x2, Decryption 2x2 */}
         <EncryptionTile />
         <DecryptionTile />
       </BentoGrid>

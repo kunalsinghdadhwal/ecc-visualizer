@@ -38,8 +38,8 @@ export function CurveRenderer({
           key={i}
           d={d}
           fill="none"
-          stroke="oklch(0.71 0.13 215)"
-          strokeWidth={0.05}
+          stroke="oklch(0.62 0.10 290)"
+          strokeWidth={0.04}
           strokeLinecap="round"
           strokeLinejoin="round"
         />

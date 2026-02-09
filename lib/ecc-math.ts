@@ -114,7 +114,6 @@ export function scalarMultiply(
     const bitValue = parseInt(bits[i]);
 
     if (i === 0) {
-      // First bit is always 1
       result = p;
       steps.push({
         bitIndex: i,
@@ -122,11 +121,20 @@ export function scalarMultiply(
         operation: "init",
         before: null,
         after: result,
-        label: `Start with P (bit ${i}: ${bitValue})`,
+        label: `Start with G`,
       });
     } else {
       // Double
       const beforeDouble = result;
+      // Record geometric data for the doubling (tangent line)
+      let lineFrom: Point | undefined;
+      let lineTo: Point | undefined;
+      let intersection: Point | undefined;
+      if (beforeDouble) {
+        lineFrom = beforeDouble;
+        lineTo = beforeDouble; // same point = tangent
+        intersection = getIntersectionPoint(beforeDouble, beforeDouble, params);
+      }
       result = pointDouble(result, params);
       steps.push({
         bitIndex: i,
@@ -134,12 +142,22 @@ export function scalarMultiply(
         operation: "double",
         before: beforeDouble,
         after: result,
-        label: `Double: 2 * current (bit ${i})`,
+        label: `Double`,
+        lineFrom,
+        lineTo,
+        intersection,
       });
 
       if (bitValue === 1) {
-        // Add
         const beforeAdd = result;
+        let addLineFrom: Point | undefined;
+        let addLineTo: Point | undefined;
+        let addIntersection: Point | undefined;
+        if (beforeAdd && p) {
+          addLineFrom = beforeAdd;
+          addLineTo = p;
+          addIntersection = getIntersectionPoint(beforeAdd, p, params);
+        }
         result = pointAdd(result, p, params);
         steps.push({
           bitIndex: i,
@@ -147,7 +165,10 @@ export function scalarMultiply(
           operation: "add",
           before: beforeAdd,
           after: result,
-          label: `Add P: current + P (bit ${i}: 1)`,
+          label: `Add G`,
+          lineFrom: addLineFrom,
+          lineTo: addLineTo,
+          intersection: addIntersection,
         });
       }
     }

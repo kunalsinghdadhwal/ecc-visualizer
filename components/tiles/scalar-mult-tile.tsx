@@ -42,7 +42,7 @@ export function ScalarMultTile() {
     if (currentStep < scalarSteps.length - 1) {
       timerRef.current = setTimeout(() => {
         setCurrentStep((prev) => prev + 1);
-      }, 1500);
+      }, 700);
     } else {
       setIsPlaying(false);
     }
@@ -72,7 +72,7 @@ export function ScalarMultTile() {
       <div className="flex flex-col gap-3 h-full">
         <div className="space-y-2 shrink-0">
           <div className="flex items-center justify-between">
-            <Label className="text-xs">k = {scalar}</Label>
+            <Label className="text-sm">k = {scalar}</Label>
           </div>
           <Slider
             value={[scalar]}
@@ -114,7 +114,7 @@ export function ScalarMultTile() {
                 </span>
                 {step.label}
                 {step.after && (
-                  <span className="block text-[10px] text-muted-foreground mt-0.5">
+                  <span className="block text-[11px] text-muted-foreground mt-0.5">
                     = {formatPoint(step.after)}
                   </span>
                 )}

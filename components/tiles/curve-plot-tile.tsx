@@ -40,7 +40,6 @@ export function CurvePlotTile() {
       } else if (!pointQ) {
         setPointQ(snapped);
       } else {
-        // Reset and start over
         setPointP(snapped);
         setPointQ(null);
       }
@@ -65,7 +64,7 @@ export function CurvePlotTile() {
           {generator && (
             <PointMarker
               point={generator}
-              color="oklch(0.71 0.13 215)"
+              color="oklch(0.73 0.12 290)"
               label="G"
               radius={0.09}
             />
@@ -73,14 +72,14 @@ export function CurvePlotTile() {
           {pointP && (
             <PointMarker
               point={pointP}
-              color="oklch(0.87 0.12 207)"
+              color="oklch(0.72 0.10 170)"
               label="P"
             />
           )}
           {pointQ && (
             <PointMarker
               point={pointQ}
-              color="oklch(0.80 0.13 212)"
+              color="oklch(0.68 0.10 330)"
               label="Q"
             />
           )}
@@ -91,7 +90,7 @@ export function CurvePlotTile() {
             <>
               <PointMarker
                 point={additionResult}
-                color="oklch(0.61 0.11 222)"
+                color="oklch(0.75 0.10 85)"
                 label="P+Q"
                 radius={0.12}
               />
@@ -99,12 +98,12 @@ export function CurvePlotTile() {
                 from={{ x: additionResult.x, y: -additionResult.y }}
                 to={additionResult}
                 dashed
-                color="oklch(0.52 0.09 223)"
+                color="oklch(0.58 0.06 85)"
               />
             </>
           )}
         </CurveRenderer>
-        <p className="absolute bottom-1 left-2 text-[10px] text-muted-foreground">
+        <p className="absolute bottom-1 left-2 text-[11px] text-muted-foreground/60">
           Click on curve to place points
         </p>
       </div>

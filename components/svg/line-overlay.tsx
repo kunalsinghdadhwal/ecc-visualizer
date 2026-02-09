@@ -17,12 +17,11 @@ interface LineOverlayProps {
 export function LineOverlay({
   from,
   to,
-  color = "oklch(0.80 0.13 212)",
+  color = "oklch(0.58 0.08 290)",
   dashed = false,
   viewBox = DEFAULT_VIEWBOX,
   animate = true,
 }: LineOverlayProps) {
-  // Extend line to edges of viewbox for the construction line effect
   const dx = to.x - from.x;
   const dy = to.y - from.y;
 
@@ -38,7 +37,6 @@ export function LineOverlay({
     x2 = viewBox.xMax;
     y2 = from.y + slope * (x2 - from.x);
   } else {
-    // Vertical line
     y1 = viewBox.yMin;
     y2 = viewBox.yMax;
   }
@@ -49,9 +47,9 @@ export function LineOverlay({
     x2,
     y2: -y2,
     stroke: color,
-    strokeWidth: 0.03,
+    strokeWidth: 0.025,
     strokeDasharray: dashed ? "0.1 0.08" : undefined,
-    opacity: 0.6,
+    opacity: 0.45,
   };
 
   if (animate) {
@@ -59,7 +57,7 @@ export function LineOverlay({
       <motion.line
         {...lineProps}
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.6 }}
+        animate={{ opacity: 0.45 }}
         transition={{ duration: 0.4 }}
       />
     );

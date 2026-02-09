@@ -51,7 +51,7 @@ export function DecryptionTile() {
     if (currentStep < decryptSteps.length - 1) {
       timerRef.current = setTimeout(() => {
         setCurrentStep((prev) => prev + 1);
-      }, 1500);
+      }, 700);
     } else {
       setIsPlaying(false);
     }
@@ -85,13 +85,13 @@ export function DecryptionTile() {
               <>
                 <PointMarker
                   point={cipherText.c1}
-                  color="oklch(0.80 0.13 212)"
+                  color="oklch(0.72 0.10 170)"
                   label="C1"
                   radius={0.08}
                 />
                 <PointMarker
                   point={cipherText.c2}
-                  color="oklch(0.61 0.11 222)"
+                  color="oklch(0.68 0.10 330)"
                   label="C2"
                   radius={0.08}
                 />
@@ -100,7 +100,7 @@ export function DecryptionTile() {
             {decryptedPoint && (
               <PointMarker
                 point={decryptedPoint}
-                color="oklch(0.87 0.12 207)"
+                color="oklch(0.75 0.10 85)"
                 label="M"
                 radius={0.12}
               />

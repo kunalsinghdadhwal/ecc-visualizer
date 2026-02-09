@@ -58,7 +58,7 @@ export function EncryptionTile() {
     if (currentStep < encryptSteps.length - 1) {
       timerRef.current = setTimeout(() => {
         setCurrentStep((prev) => prev + 1);
-      }, 1500);
+      }, 700);
     } else {
       setIsPlaying(false);
     }
@@ -88,18 +88,18 @@ export function EncryptionTile() {
         <div className="flex-1 min-h-[180px]">
           <CurveRenderer params={curveParams}>
             {messagePoint && (
-              <PointMarker point={messagePoint} color="oklch(0.87 0.12 207)" label="M" />
+              <PointMarker point={messagePoint} color="oklch(0.75 0.10 85)" label="M" />
             )}
             {cipherText && (
               <>
                 <PointMarker
                   point={cipherText.c1}
-                  color="oklch(0.80 0.13 212)"
+                  color="oklch(0.72 0.10 170)"
                   label="C1"
                 />
                 <PointMarker
                   point={cipherText.c2}
-                  color="oklch(0.61 0.11 222)"
+                  color="oklch(0.68 0.10 330)"
                   label="C2"
                 />
               </>
@@ -109,7 +109,7 @@ export function EncryptionTile() {
 
         <div className="space-y-2 shrink-0">
           <div className="flex items-center justify-between">
-            <Label className="text-xs">Random k = {randomK}</Label>
+            <Label className="text-sm">Random k = {randomK}</Label>
           </div>
           <Slider
             value={[randomK]}

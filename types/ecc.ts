@@ -50,4 +50,9 @@ export interface ScalarMultStep {
   before: Point | null;
   after: Point | null;
   label: string;
+  /** The two points whose line (tangent or secant) is drawn */
+  lineFrom?: Point;
+  lineTo?: Point;
+  /** The third intersection point before reflection */
+  intersection?: Point;
 }

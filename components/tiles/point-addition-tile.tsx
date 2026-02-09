@@ -48,8 +48,8 @@ export function PointAdditionTile() {
         const result = pointAdd(pointP, pointQ, curveParams);
         setAdditionResult(result);
         setStep("done");
-      }, 1500);
-    }, 1500);
+      }, 700);
+    }, 700);
   }, [pointP, pointQ, curveParams, setAdditionResult, reset]);
 
   useEffect(() => {
@@ -64,10 +64,10 @@ export function PointAdditionTile() {
         <div className="flex-1 min-h-[180px]">
           <CurveRenderer params={curveParams}>
             {pointP && (
-              <PointMarker point={pointP} color="oklch(0.87 0.12 207)" label="P" />
+              <PointMarker point={pointP} color="oklch(0.72 0.10 170)" label="P" />
             )}
             {pointQ && (
-              <PointMarker point={pointQ} color="oklch(0.80 0.13 212)" label="Q" />
+              <PointMarker point={pointQ} color="oklch(0.68 0.10 330)" label="Q" />
             )}
             {(step === "draw-line" || step === "intersection" || step === "done") &&
               pointP &&
@@ -77,7 +77,7 @@ export function PointAdditionTile() {
             {(step === "intersection" || step === "done") && intersection && (
               <PointMarker
                 point={intersection}
-                color="oklch(0.52 0.09 223)"
+                color="oklch(0.55 0.08 290)"
                 label="R'"
                 radius={0.08}
               />
@@ -88,11 +88,11 @@ export function PointAdditionTile() {
                   from={{ x: additionResult.x, y: -additionResult.y }}
                   to={additionResult}
                   dashed
-                  color="oklch(0.52 0.09 223)"
+                  color="oklch(0.58 0.06 85)"
                 />
                 <PointMarker
                   point={additionResult}
-                  color="oklch(0.61 0.11 222)"
+                  color="oklch(0.75 0.10 85)"
                   label="P+Q"
                   radius={0.12}
                 />
@@ -108,12 +108,12 @@ export function PointAdditionTile() {
             Reset
           </Button>
         </div>
-        <div className="text-xs text-muted-foreground shrink-0">
+        <p className="text-xs text-muted-foreground shrink-0">
           {step === "idle" && (canCompute ? "Ready to compute" : "Place P and Q on the curve above")}
           {step === "draw-line" && "Drawing line through P and Q..."}
           {step === "intersection" && `Third intersection R' = ${formatPoint(intersection)}`}
           {step === "done" && `Result: P + Q = ${formatPoint(additionResult)}`}
-        </div>
+        </p>
       </div>
     </BentoTile>
   );

@@ -25,7 +25,7 @@ export function MessageInputTile() {
     <BentoTile title="Message">
       <div className="flex flex-col gap-3">
         <div className="space-y-1.5">
-          <Label className="text-xs">Plaintext message</Label>
+          <Label className="text-sm">Plaintext message</Label>
           <Input
             value={messageText}
             onChange={(e) => handleChange(e.target.value)}
@@ -38,7 +38,7 @@ export function MessageInputTile() {
             <p>Numeric value: {stringToNumber(messageText)}</p>
             <p>
               Point M:{" "}
-              <span className="text-foreground font-mono text-[11px]">
+              <span className="text-foreground font-mono text-xs">
                 {formatPoint(messagePoint)}
               </span>
             </p>

@@ -11,7 +11,6 @@ export function Axes({ viewBox }: AxesProps) {
 
   const gridLines: React.ReactNode[] = [];
 
-  // Vertical grid lines
   for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
     gridLines.push(
       <line
@@ -21,8 +20,8 @@ export function Axes({ viewBox }: AxesProps) {
         x2={x}
         y2={yMax}
         stroke="currentColor"
-        strokeWidth={x === 0 ? 0.03 : 0.015}
-        opacity={x === 0 ? 0.4 : 0.12}
+        strokeWidth={x === 0 ? 0.025 : 0.01}
+        opacity={x === 0 ? 0.3 : 0.08}
       />
     );
     if (x !== 0) {
@@ -30,11 +29,12 @@ export function Axes({ viewBox }: AxesProps) {
         <text
           key={`vl-${x}`}
           x={x}
-          y={0.35}
+          y={0.32}
           textAnchor="middle"
           fill="currentColor"
-          opacity={0.35}
-          fontSize={0.28}
+          opacity={0.25}
+          fontSize={0.26}
+          fontFamily="var(--font-geist-mono), monospace"
         >
           {x}
         </text>
@@ -42,7 +42,6 @@ export function Axes({ viewBox }: AxesProps) {
     }
   }
 
-  // Horizontal grid lines (y is flipped in SVG)
   for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
     gridLines.push(
       <line
@@ -52,8 +51,8 @@ export function Axes({ viewBox }: AxesProps) {
         x2={xMax}
         y2={-y}
         stroke="currentColor"
-        strokeWidth={y === 0 ? 0.03 : 0.015}
-        opacity={y === 0 ? 0.4 : 0.12}
+        strokeWidth={y === 0 ? 0.025 : 0.01}
+        opacity={y === 0 ? 0.3 : 0.08}
       />
     );
     if (y !== 0) {
@@ -65,8 +64,9 @@ export function Axes({ viewBox }: AxesProps) {
           textAnchor="start"
           dominantBaseline="middle"
           fill="currentColor"
-          opacity={0.35}
-          fontSize={0.28}
+          opacity={0.25}
+          fontSize={0.26}
+          fontFamily="var(--font-geist-mono), monospace"
         >
           {y}
         </text>

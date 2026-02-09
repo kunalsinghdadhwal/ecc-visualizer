@@ -17,7 +17,7 @@ export function CurveParamsTile() {
       <div className="flex flex-col gap-4">
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label className="text-xs">a = {curveParams.a.toFixed(1)}</Label>
+            <Label className="text-sm">a = {curveParams.a.toFixed(1)}</Label>
           </div>
           <Slider
             value={[curveParams.a]}
@@ -29,7 +29,7 @@ export function CurveParamsTile() {
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label className="text-xs">b = {curveParams.b.toFixed(1)}</Label>
+            <Label className="text-sm">b = {curveParams.b.toFixed(1)}</Label>
           </div>
           <Slider
             value={[curveParams.b]}
@@ -42,7 +42,7 @@ export function CurveParamsTile() {
         <div className="text-xs text-muted-foreground space-y-1">
           <p>4a&sup3; + 27b&sup2; = {disc.toFixed(2)}</p>
           {singular && (
-            <Badge variant="destructive" className="text-[10px]">
+            <Badge variant="destructive" className="text-[11px]">
               Singular curve
             </Badge>
           )}

@@ -13,12 +13,11 @@ interface PointMarkerProps {
 
 export function PointMarker({
   point,
-  color = "oklch(0.87 0.12 207)",
+  color = "oklch(0.73 0.12 290)",
   label,
   radius = 0.1,
   animate = true,
 }: PointMarkerProps) {
-  // SVG y is flipped
   const svgY = -point.y;
 
   const circleProps = {
@@ -34,19 +33,21 @@ export function PointMarker({
         <motion.circle
           {...circleProps}
           initial={{ r: 0, opacity: 0 }}
-          animate={{ r: radius, opacity: 1 }}
+          animate={{ r: radius, opacity: 0.9 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
         />
       ) : (
-        <circle {...circleProps} />
+        <circle {...circleProps} opacity={0.9} />
       )}
       {label && (
         <text
           x={point.x + 0.2}
           y={svgY - 0.2}
           fill={color}
-          fontSize={0.28}
+          fontSize={0.26}
           fontWeight="500"
+          fontFamily="var(--font-geist-mono), monospace"
+          opacity={0.85}
         >
           {label}
         </text>

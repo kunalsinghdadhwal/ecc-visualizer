@@ -62,3 +62,33 @@ export function formatPoint(p: Point | null): string {
   if (p === null) return "O (infinity)";
   return `(${p.x.toFixed(3)}, ${p.y.toFixed(3)})`;
 }
+
+/**
+ * Generate a deterministic base64-like key string from point coordinates.
+ * Produces output resembling real SSH/ECC key formats.
+ */
+export function pointToKeyString(
+  p: Point,
+  privateKey: number,
+  type: "public" | "private" = "public"
+): string {
+  // Create a deterministic byte sequence from the coordinates
+  const buf = new ArrayBuffer(32);
+  const view = new DataView(buf);
+  // Pack x and y as float64
+  view.setFloat64(0, p.x);
+  view.setFloat64(8, p.y);
+  // Mix in the private key for more entropy appearance
+  view.setFloat64(16, p.x * privateKey);
+  view.setFloat64(24, p.y * privateKey + Math.PI);
+
+  const bytes = new Uint8Array(buf);
+  // Simple base64 encoding
+  const b64 = btoa(String.fromCharCode(...bytes));
+
+  if (type === "private") {
+    return `-----BEGIN ECC PRIVATE KEY-----\n${privateKey.toString(16).padStart(8, "0").toUpperCase()}${b64}\n-----END ECC PRIVATE KEY-----`;
+  }
+
+  return `ecc-secp256 ${b64}`;
+}

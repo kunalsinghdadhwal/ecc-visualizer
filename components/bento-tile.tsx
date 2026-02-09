@@ -31,16 +31,20 @@ export function BentoTile({
   return (
     <div
       className={cn(
-        "rounded-lg border border-border bg-card p-4 flex flex-col gap-3 overflow-hidden",
+        "rounded-md border border-border/60 bg-card p-5 flex flex-col gap-3 overflow-hidden transition-colors",
         spanClasses[colSpan] || "",
         rowClasses[rowSpan] || "",
         className
       )}
     >
       <div className="flex items-baseline justify-between gap-2 shrink-0">
-        <h3 className="text-sm font-medium text-foreground">{title}</h3>
+        <h3 className="text-sm font-semibold tracking-tight text-foreground">
+          {title}
+        </h3>
         {subtitle && (
-          <span className="text-xs text-muted-foreground">{subtitle}</span>
+          <span className="text-xs font-mono text-muted-foreground">
+            {subtitle}
+          </span>
         )}
       </div>
       <div className="flex-1 min-h-0">{children}</div>
