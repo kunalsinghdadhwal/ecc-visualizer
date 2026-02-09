@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface BentoTileProps {
@@ -29,7 +30,10 @@ export function BentoTile({
   const rowClasses = ["", "", "row-span-2", "row-span-3"];
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       className={cn(
         "rounded-md border border-border/60 bg-card p-5 flex flex-col gap-3 overflow-hidden transition-colors",
         spanClasses[colSpan] || "",
@@ -48,6 +52,6 @@ export function BentoTile({
         )}
       </div>
       <div className="flex-1 min-h-0">{children}</div>
-    </div>
+    </motion.div>
   );
 }
