@@ -16,62 +16,70 @@ export const DEFAULT_VIEWBOX: ViewBox = {
 
 /**
  * Given curve y^2 = x^3 + ax + b, generate SVG path data
- * for both the upper and lower branches.
+ * as closed loops per connected component.
+ * Each component traces upper branch left-to-right, then
+ * lower branch right-to-left, closing the loop so there
+ * is no gap where the branches meet at y=0.
  */
 export function generateCurvePaths(
   params: CurveParams,
   viewBox: ViewBox = DEFAULT_VIEWBOX,
   numSamples: number = 500
-): { upper: string; lower: string } {
+): string[] {
   const { a, b } = params;
   const { xMin, xMax } = viewBox;
   const step = (xMax - xMin) / numSamples;
 
-  const upperPoints: Point[] = [];
-  const lowerPoints: Point[] = [];
+  // Collect contiguous x-regions where rhs >= 0
+  type Region = { upper: Point[]; lower: Point[] };
+  const regions: Region[] = [];
+  let current: Region | null = null;
 
   for (let i = 0; i <= numSamples; i++) {
     const x = xMin + i * step;
     const rhs = x * x * x + a * x + b;
     if (rhs >= 0) {
       const y = Math.sqrt(rhs);
-      upperPoints.push({ x, y });
-      lowerPoints.push({ x, y: -y });
+      if (!current) {
+        current = { upper: [], lower: [] };
+      }
+      current.upper.push({ x, y });
+      current.lower.push({ x, y: -y });
+    } else {
+      if (current) {
+        regions.push(current);
+        current = null;
+      }
     }
   }
-
-  return {
-    upper: pointsToSvgPath(upperPoints),
-    lower: pointsToSvgPath(lowerPoints),
-  };
-}
-
-function pointsToSvgPath(points: Point[]): string {
-  if (points.length === 0) return "";
-
-  // Split into contiguous segments (handle gaps)
-  const segments: Point[][] = [];
-  let currentSegment: Point[] = [points[0]];
-
-  for (let i = 1; i < points.length; i++) {
-    const dx = points[i].x - points[i - 1].x;
-    // If gap is larger than 2 steps, start a new segment
-    if (dx > 0.05) {
-      segments.push(currentSegment);
-      currentSegment = [];
-    }
-    currentSegment.push(points[i]);
+  if (current) {
+    regions.push(current);
   }
-  segments.push(currentSegment);
 
-  return segments
-    .filter((seg) => seg.length > 1)
-    .map((seg) => {
-      const first = seg[0];
-      const rest = seg.slice(1);
-      return `M ${first.x} ${-first.y} ` + rest.map((p) => `L ${p.x} ${-p.y}`).join(" ");
-    })
-    .join(" ");
+  // For each region, build a single closed SVG path:
+  // upper left-to-right, then lower right-to-left
+  return regions
+    .filter((r) => r.upper.length > 1)
+    .map((r) => {
+      const upper = r.upper;
+      const lower = [...r.lower].reverse();
+
+      // Start at the first upper point
+      let d = `M ${upper[0].x} ${-upper[0].y}`;
+
+      // Trace upper branch left to right
+      for (let i = 1; i < upper.length; i++) {
+        d += ` L ${upper[i].x} ${-upper[i].y}`;
+      }
+
+      // Trace lower branch right to left (connects seamlessly at the rightmost x)
+      for (let i = 0; i < lower.length; i++) {
+        d += ` L ${lower[i].x} ${-lower[i].y}`;
+      }
+
+      d += " Z";
+      return d;
+    });
 }
 
 /**

@@ -23,7 +23,7 @@ export function PointAdditionTile() {
 
   const [step, setStep] = useState<AddStep>("idle");
   const [intersection, setIntersection] = useState<{ x: number; y: number } | null>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const canCompute = pointP !== null && pointQ !== null;
 

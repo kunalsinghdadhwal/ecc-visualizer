@@ -33,20 +33,17 @@ export function CurveRenderer({
       preserveAspectRatio="xMidYMid meet"
     >
       <Axes viewBox={viewBox} />
-      <path
-        d={paths.upper}
-        fill="none"
-        stroke="oklch(0.71 0.13 215)"
-        strokeWidth={0.05}
-        strokeLinecap="round"
-      />
-      <path
-        d={paths.lower}
-        fill="none"
-        stroke="oklch(0.71 0.13 215)"
-        strokeWidth={0.05}
-        strokeLinecap="round"
-      />
+      {paths.map((d, i) => (
+        <path
+          key={i}
+          d={d}
+          fill="none"
+          stroke="oklch(0.71 0.13 215)"
+          strokeWidth={0.05}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      ))}
       {children}
     </svg>
   );
