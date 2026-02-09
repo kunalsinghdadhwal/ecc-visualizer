@@ -58,28 +58,45 @@ export function generateCurvePaths(
 
   const r3 = (n: number) => +n.toFixed(3);
 
-  // For each region, build a single closed SVG path:
-  // upper left-to-right, then lower right-to-left
+  const edgeEps = step * 1.5;
+  const touchesLeft = (r: Region) => r.upper[0].x <= xMin + edgeEps;
+  const touchesRight = (r: Region) => r.upper[r.upper.length - 1].x >= xMax - edgeEps;
+
+  // For each region, build an SVG path.
+  // If the region extends to a viewBox edge, use a moveTo (M) instead of
+  // a lineTo (L) at that edge to avoid a visible vertical border line.
+  // Only Z-close regions that don't touch either edge.
   return regions
     .filter((r) => r.upper.length > 1)
     .map((r) => {
       const upper = r.upper;
       const lower = [...r.lower].reverse();
-
-      // Start at the first upper point
-      let d = `M ${r3(upper[0].x)} ${r3(-upper[0].y)}`;
+      const atRight = touchesRight(r);
+      const atLeft = touchesLeft(r);
 
       // Trace upper branch left to right
+      let d = `M ${r3(upper[0].x)} ${r3(-upper[0].y)}`;
       for (let i = 1; i < upper.length; i++) {
         d += ` L ${r3(upper[i].x)} ${r3(-upper[i].y)}`;
       }
 
-      // Trace lower branch right to left (connects seamlessly at the rightmost x)
-      for (let i = 0; i < lower.length; i++) {
+      // At the right edge, break the stroke with M instead of connecting via L
+      if (atRight) {
+        d += ` M ${r3(lower[0].x)} ${r3(-lower[0].y)}`;
+      } else {
+        d += ` L ${r3(lower[0].x)} ${r3(-lower[0].y)}`;
+      }
+
+      // Trace lower branch right to left
+      for (let i = 1; i < lower.length; i++) {
         d += ` L ${r3(lower[i].x)} ${r3(-lower[i].y)}`;
       }
 
-      d += " Z";
+      // Close only if the region doesn't touch the left edge
+      if (!atLeft) {
+        d += " Z";
+      }
+
       return d;
     });
 }

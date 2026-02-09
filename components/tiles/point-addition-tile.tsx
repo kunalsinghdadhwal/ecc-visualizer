@@ -1,11 +1,9 @@
 "use client";
 
 import { useCallback, useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { BentoTile } from "@/components/bento-tile";
 import { Button } from "@/components/ui/button";
-import { CurveRenderer } from "@/components/svg/curve-renderer";
-import { PointMarker } from "@/components/svg/point-marker";
-import { LineOverlay } from "@/components/svg/line-overlay";
 import { useECCStore } from "@/hooks/use-ecc-store";
 import { pointAdd, getIntersectionPoint } from "@/lib/ecc-math";
 import { formatPoint } from "@/lib/message-mapping";
@@ -58,49 +56,66 @@ export function PointAdditionTile() {
     };
   }, []);
 
+  const steps: { label: string; active: boolean; done: boolean }[] = [
+    {
+      label: `P = ${formatPoint(pointP)}`,
+      active: step === "idle",
+      done: step !== "idle",
+    },
+    {
+      label: `Q = ${formatPoint(pointQ)}`,
+      active: step === "idle",
+      done: step !== "idle",
+    },
+    {
+      label: "Draw line through P and Q",
+      active: step === "draw-line",
+      done: step === "intersection" || step === "done",
+    },
+    {
+      label: `R' = ${formatPoint(intersection)}`,
+      active: step === "intersection",
+      done: step === "done",
+    },
+    {
+      label: `P + Q = ${formatPoint(additionResult)}`,
+      active: step === "done",
+      done: step === "done",
+    },
+  ];
+
   return (
-    <BentoTile title="Point Addition" subtitle="P + Q" colSpan={2} className="md:col-span-2">
-      <div className="flex flex-col gap-2 h-full">
-        <div className="flex-1 min-h-[180px]">
-          <CurveRenderer params={curveParams}>
-            {pointP && (
-              <PointMarker point={pointP} color="oklch(0.72 0.10 170)" label="P" />
-            )}
-            {pointQ && (
-              <PointMarker point={pointQ} color="oklch(0.68 0.10 330)" label="Q" />
-            )}
-            {(step === "draw-line" || step === "intersection" || step === "done") &&
-              pointP &&
-              pointQ && (
-                <LineOverlay from={pointP} to={pointQ} />
-              )}
-            {(step === "intersection" || step === "done") && intersection && (
-              <PointMarker
-                point={intersection}
-                color="oklch(0.55 0.08 290)"
-                label="R'"
-                radius={0.08}
-              />
-            )}
-            {step === "done" && additionResult && (
-              <>
-                <LineOverlay
-                  from={{ x: additionResult.x, y: -additionResult.y }}
-                  to={additionResult}
-                  dashed
-                  color="oklch(0.58 0.06 85)"
-                />
-                <PointMarker
-                  point={additionResult}
-                  color="oklch(0.75 0.10 85)"
-                  label="P+Q"
-                  radius={0.12}
-                />
-              </>
-            )}
-          </CurveRenderer>
+    <BentoTile title="Point Addition" subtitle="P + Q" className="self-start">
+      <div className="flex flex-col gap-3">
+        <div className="space-y-1">
+          <AnimatePresence mode="popLayout">
+            {steps.map((s, i) => {
+              if (!s.done && !s.active && step !== "idle") return null;
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className={`text-xs px-2 py-1 rounded font-mono ${
+                    s.active && step !== "idle"
+                      ? "bg-primary/10 text-foreground"
+                      : s.done
+                        ? "text-muted-foreground"
+                        : "text-muted-foreground/50"
+                  }`}
+                >
+                  <span className="text-primary/60 mr-1.5">
+                    {i === 0 ? "P" : i === 1 ? "Q" : i === 2 ? "LINE" : i === 3 ? "R'" : "SUM"}
+                  </span>
+                  {s.label}
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+
+        <div className="flex items-center gap-2">
           <Button size="sm" onClick={runAnimation} disabled={!canCompute} className="text-xs">
             Compute P + Q
           </Button>
@@ -108,12 +123,12 @@ export function PointAdditionTile() {
             Reset
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground shrink-0">
-          {step === "idle" && (canCompute ? "Ready to compute" : "Place P and Q on the curve above")}
-          {step === "draw-line" && "Drawing line through P and Q..."}
-          {step === "intersection" && `Third intersection R' = ${formatPoint(intersection)}`}
-          {step === "done" && `Result: P + Q = ${formatPoint(additionResult)}`}
-        </p>
+
+        {!canCompute && (
+          <p className="text-xs text-muted-foreground/60">
+            Place P and Q on the curve above
+          </p>
+        )}
       </div>
     </BentoTile>
   );

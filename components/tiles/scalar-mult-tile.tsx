@@ -66,10 +66,9 @@ export function ScalarMultTile() {
     <BentoTile
       title="Scalar Multiplication"
       subtitle={`${scalar}G (binary: ${binaryStr})`}
-      colSpan={2}
-      className="md:col-span-2"
+      className="md:col-span-2 lg:col-span-1 self-start"
     >
-      <div className="flex flex-col gap-3 h-full">
+      <div className="flex flex-col gap-3">
         <div className="space-y-2 shrink-0">
           <div className="flex items-center justify-between">
             <Label className="text-sm">k = {scalar}</Label>
@@ -95,7 +94,7 @@ export function ScalarMultTile() {
           </Button>
         </div>
 
-        <div className="flex-1 min-h-0 overflow-y-auto space-y-1">
+        <div className="overflow-y-auto space-y-1 max-h-[200px]">
           <AnimatePresence mode="popLayout">
             {scalarSteps.slice(0, currentStep + 1).map((step: ScalarMultStep, i: number) => (
               <motion.div
