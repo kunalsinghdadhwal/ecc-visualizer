@@ -48,8 +48,8 @@ export function PointAdditionTile() {
         const result = pointAdd(pointP, pointQ, curveParams);
         setAdditionResult(result);
         setStep("done");
-      }, 700);
-    }, 700);
+      }, 500);
+    }, 500);
   }, [pointP, pointQ, curveParams, setAdditionResult, reset]);
 
   useEffect(() => {

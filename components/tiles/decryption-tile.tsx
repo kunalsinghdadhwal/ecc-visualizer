@@ -51,7 +51,7 @@ export function DecryptionTile() {
     if (currentStep < decryptSteps.length - 1) {
       timerRef.current = setTimeout(() => {
         setCurrentStep((prev) => prev + 1);
-      }, 700);
+      }, 500);
     } else {
       setIsPlaying(false);
     }

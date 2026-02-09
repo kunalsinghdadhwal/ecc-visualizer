@@ -58,7 +58,7 @@ export function EncryptionTile() {
     if (currentStep < encryptSteps.length - 1) {
       timerRef.current = setTimeout(() => {
         setCurrentStep((prev) => prev + 1);
-      }, 700);
+      }, 500);
     } else {
       setIsPlaying(false);
     }

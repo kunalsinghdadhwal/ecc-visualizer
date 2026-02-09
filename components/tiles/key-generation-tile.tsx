@@ -74,7 +74,7 @@ export function KeyGenerationTile() {
     if (currentStep < geomSteps.length - 1) {
       timerRef.current = setTimeout(() => {
         setCurrentStep((prev) => prev + 1);
-      }, 700);
+      }, 500);
     } else {
       setIsPlaying(false);
     }

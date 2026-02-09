@@ -42,7 +42,7 @@ export function ScalarMultTile() {
     if (currentStep < scalarSteps.length - 1) {
       timerRef.current = setTimeout(() => {
         setCurrentStep((prev) => prev + 1);
-      }, 700);
+      }, 500);
     } else {
       setIsPlaying(false);
     }
