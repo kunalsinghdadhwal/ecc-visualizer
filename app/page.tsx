@@ -8,9 +8,25 @@ import { KeyGenerationTile } from "@/components/tiles/key-generation-tile";
 import { EncryptionTile } from "@/components/tiles/encryption-tile";
 import { DecryptionTile } from "@/components/tiles/decryption-tile";
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "ECC Visualizer",
+  url: "https://ecc.kxnl.in",
+  description:
+    "Explore elliptic curve cryptography visually. Step through point addition, scalar multiplication, key generation, and ElGamal encryption/decryption on interactive SVG curves.",
+  applicationCategory: "EducationalApplication",
+  operatingSystem: "Any",
+  offers: { "@type": "Offer", price: "0" },
+};
+
 export default function Page() {
   return (
     <main className="min-h-screen bg-background py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-[1600px] mx-auto px-4 mb-8">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">
           ECC Visualizer
