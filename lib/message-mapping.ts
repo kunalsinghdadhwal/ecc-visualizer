@@ -64,31 +64,68 @@ export function formatPoint(p: Point | null): string {
 }
 
 /**
- * Generate a deterministic base64-like key string from point coordinates.
- * Produces output resembling real SSH/ECC key formats.
+ * Simple deterministic PRNG (xorshift32) seeded from a number.
+ * Used to expand a few floats into many realistic-looking key bytes.
+ */
+function seededRng(seed: number) {
+  let s = (seed ^ 0xdeadbeef) >>> 0 || 1;
+  return () => {
+    s ^= s << 13;
+    s ^= s >>> 17;
+    s ^= s << 5;
+    return (s >>> 0) / 0xffffffff;
+  };
+}
+
+/**
+ * Generate a deterministic base64 key string from point coordinates.
+ * Produces output resembling real SSH/ECDSA key formats in length and structure.
  */
 export function pointToKeyString(
   p: Point,
   privateKey: number,
   type: "public" | "private" = "public"
 ): string {
-  // Create a deterministic byte sequence from the coordinates
-  const buf = new ArrayBuffer(32);
-  const view = new DataView(buf);
-  // Pack x and y as float64
-  view.setFloat64(0, p.x);
-  view.setFloat64(8, p.y);
-  // Mix in the private key for more entropy appearance
-  view.setFloat64(16, p.x * privateKey);
-  view.setFloat64(24, p.y * privateKey + Math.PI);
-
-  const bytes = new Uint8Array(buf);
-  // Simple base64 encoding
-  const b64 = btoa(String.fromCharCode(...bytes));
+  // Seed the PRNG from the actual key material so output is deterministic
+  const seedVal = Math.abs(p.x * 100003 + p.y * 99991 + privateKey * 100019);
+  const rng = seededRng(Math.floor(seedVal));
 
   if (type === "private") {
-    return `-----BEGIN ECC PRIVATE KEY-----\n${privateKey.toString(16).padStart(8, "0").toUpperCase()}${b64}\n-----END ECC PRIVATE KEY-----`;
+    // Real ECDSA PEM private keys are ~176 bytes -> ~7 lines of base64
+    const buf = new ArrayBuffer(176);
+    const view = new DataView(buf);
+    // Embed actual key data in the first 32 bytes
+    view.setFloat64(0, p.x);
+    view.setFloat64(8, p.y);
+    view.setFloat64(16, p.x * privateKey);
+    view.setFloat64(24, p.y * privateKey + Math.PI);
+    // Fill remaining bytes deterministically
+    const bytes = new Uint8Array(buf);
+    for (let i = 32; i < 176; i++) {
+      bytes[i] = Math.floor(rng() * 256);
+    }
+    const b64 = btoa(String.fromCharCode(...bytes));
+    // Wrap at 64 characters per line like real PEM
+    const lines = b64.match(/.{1,64}/g)!.join("\n");
+    return `-----BEGIN EC PRIVATE KEY-----\n${lines}\n-----END EC PRIVATE KEY-----`;
   }
 
-  return `ecc-secp256 ${b64}`;
+  // Real ECDSA public key blobs are ~140 bytes
+  const buf = new ArrayBuffer(140);
+  const view = new DataView(buf);
+  // Header bytes mimicking the SSH wire format:
+  // 4-byte length + "ecdsa-sha2-nistp256" tag bytes
+  const tag = [0x00, 0x00, 0x00, 0x13, 0x65, 0x63, 0x64, 0x73, 0x61, 0x2d,
+    0x73, 0x68, 0x61, 0x32, 0x2d, 0x6e, 0x69, 0x73, 0x74, 0x70, 0x32, 0x35, 0x36];
+  const bytes = new Uint8Array(buf);
+  bytes.set(tag, 0);
+  // Embed the actual point data
+  view.setFloat64(23, p.x);
+  view.setFloat64(31, p.y);
+  // Fill the rest deterministically
+  for (let i = 39; i < 140; i++) {
+    bytes[i] = Math.floor(rng() * 256);
+  }
+  const b64 = btoa(String.fromCharCode(...bytes));
+  return `ecdsa-sha2-nistp256 ${b64}`;
 }
